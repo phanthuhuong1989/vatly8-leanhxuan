@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thí nghiệm ảo: Ròng rọc – Đòn bẩy – Vật lý 8</title>
+  <style>
+    body { 
+      font-family: "Times New Roman", serif; 
+      margin: 0; 
+      padding: 10px; 
+      background-color: #ffffff;
+    }
+    h2 {
+      text-align: center;
+      color: #d32f2f;
+    }
+    #simulation-container {
+      width: 100%;
+      height: 600px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    #chatbot {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 320px;
+      background: #fff8e1;
+      border: 1px solid #ffecb3;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      font-size: 13px;
+      z-index: 1000;
+    }
+    #chat-log {
+      height: 150px;
+      overflow-y: auto;
+      margin-bottom: 8px;
+      padding: 5px;
+      background: white;
+      border: 1px solid #ffe082;
+      font-size: 12px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 5px;
+      font-size: 13px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      margin-top: 5px;
+      padding: 5px 10px;
+      background: #d32f2f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #b71c1c;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Thí nghiệm ảo: Ròng rọc – Đòn bẩy</h2>
+<p><em>Trường THCS Lê Anh Xuân – Đà Nẵng | Môn Vật lý lớp 8</em></p>
+
+<iframe 
+  id="simulation-container" 
+  src="https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_all.html?locale=vi"
+  allowfullscreen>
+</iframe>
+
+<div id="chatbot">
+  <strong>💬 Trợ lý Vật lý AI</strong>
+  <div id="chat-log">
+    <em>Chào em! Em có thể hỏi: “Ròng rọc cố định có lợi gì?”, “Đòn bẩy giúp tiết kiệm lực không?”, “Muốn bẩy vật nặng nên đặt điểm tựa ở đâu?”…</em>
+  </div>
+  <input type="text" id="user-input" placeholder="Nhập câu hỏi về ròng rọc hoặc đòn bẩy..." />
+  <button onclick="sendQuestion()">Gửi</button>
+</div>
+
+<script>
+function sendQuestion() {
+  const input = document.getElementById("user-input");
+  const question = input.value.trim();
+  if (!question) return;
+
+  const chatLog = document.getElementById("chat-log");
+  chatLog.innerHTML += `<div><b>Bạn:</b> ${question}</div>`;
+
+  let answer = "Cảm ơn em! Đây là một hiện tượng rất thú vị trong đời sống – từ cần cẩu đến cái bập bênh!";
+
+  const lower = question.toLowerCase();
+
+  if ((lower.includes("ròng rọc") || lower.includes("ròng roc")) && (lower.includes("cố định") || lower.includes("co dinh"))) {
+    answer = "✅ Ròng rọc **cố định** không làm giảm lực kéo, nhưng **giúp đổi hướng lực** – ví dụ: kéo xuống để nâng vật lên.";
+  } 
+  else if ((lower.includes("ròng rọc") || lower.includes("ròng roc")) && (lower.includes("di động") || lower.includes("di dong") || lower.includes("động"))) {
+    answer = "✅ Ròng rọc **di động** giúp **giảm lực kéo còn một nửa** (nếu bỏ qua ma sát). Em thử kéo vật trong thí nghiệm – sẽ thấy lực nhỏ hơn!";
+  } 
+  else if (lower.includes("hệ ròng rọc") || (lower.includes("ròng rọc") && lower.includes("kết hợp"))) {
+    answer = "✅ Hệ ròng rọc (cố định + di động) vừa **giảm lực**, vừa **đổi hướng**. Lực kéo F = P / n, với n là số đoạn dây đỡ vật.";
+  } 
+  else if ((lower.includes("đòn bẩy") || lower.includes("don bay") || lower.includes("đòn bầy")) && (lower.includes("tiết kiệm lực") || lower.includes("lợi thế") || lower.includes("lực"))) {
+    answer = "✅ Đòn bẩy **tiết kiệm lực** nếu **cánh tay đòn của lực kéo dài hơn** cánh tay đòn của trọng lực. Ví dụ: dùng xà beng để bẩy đá!";
+  } 
+  else if ((lower.includes("điểm tựa") || lower.includes("diem tua")) && (lower.includes("đặt") || lower.includes("ở đâu") || lower.includes("dau"))) {
+    answer = "💡 Muốn bẩy vật nặng dễ hơn, em nên **đặt điểm tựa gần vật nặng** → cánh tay đòn phía lực kéo sẽ dài hơn → tiết kiệm lực.";
+  } 
+  else if (lower.includes("công") && (lower.includes("ròng rọc") || lower.includes("đòn bẩy"))) {
+    answer = "⚠️ Dù ròng rọc hay đòn bẩy giúp **giảm lực**, nhưng **không cho ta được lợi về công** – vì quãng đường kéo sẽ tăng lên. Đây là “nguyên lý vàng” của cơ học!";
+  }
+
+  chatLog.innerHTML += `<div style="background:#fff3e0; padding:5px; margin:5px 0; border-left:3px solid #f57c00;"><b>AI:</b> ${answer}</div>`;
+  input.value = "";
+  chatLog.scrollTop = chatLog.scrollHeight;
+}
+</script>
+
+</body>
+</html>
