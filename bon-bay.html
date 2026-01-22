@@ -1,0 +1,85 @@
+<!-- Chatbot AI - có thể ẩn/hiện -->
+<div id="chatbot" style="position: fixed; bottom: 20px; right: 20px; width: 320px; background: #f3e5f5; border: 1px solid #ce93d8; border-radius: 10px; padding: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); font-size: 13px; z-index: 1000;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <strong>💬 Trợ lý Vật lý AI</strong>
+    <button onclick="toggleChatbot()" style="background: none; border: none; cursor: pointer; font-size: 14px;">🗕</button>
+  </div>
+  <div id="chat-log" style="height: 150px; overflow-y: auto; margin-bottom: 8px; padding: 5px; background: white; border: 1px solid #d1c4e9; font-size: 12px;"></div>
+  <input type="text" id="user-input" placeholder="Nhập câu hỏi về đòn bẩy..." style="width: 100%; padding: 5px; font-size: 13px; border: 1px solid #ccc; border-radius: 4px;" />
+  <button onclick="sendQuestion()" style="margin-top: 5px; padding: 5px 10px; background: #7b1fa2; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Gửi</button>
+</div>
+
+<script>
+let isChatbotVisible = true;
+
+function toggleChatbot() {
+  const chatbot = document.getElementById("chatbot");
+  if (isChatbotVisible) {
+    chatbot.style.height = "40px";
+    chatbot.style.overflow = "hidden";
+    chatbot.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <strong>💬 Trợ lý Vật lý AI</strong>
+        <button onclick="toggleChatbot()" style="background: none; border: none; cursor: pointer; font-size: 14px;">🗗</button>
+      </div>
+    `;
+  } else {
+    // Khôi phục nội dung gốc
+    chatbot.style.height = "auto";
+    chatbot.style.overflow = "visible";
+    chatbot.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <strong>💬 Trợ lý Vật lý AI</strong>
+        <button onclick="toggleChatbot()" style="background: none; border: none; cursor: pointer; font-size: 14px;">🗕</button>
+      </div>
+      <div id="chat-log" style="height: 150px; overflow-y: auto; margin-bottom: 8px; padding: 5px; background: white; border: 1px solid #d1c4e9; font-size: 12px;"></div>
+      <input type="text" id="user-input" placeholder="Nhập câu hỏi về đòn bẩy..." style="width: 100%; padding: 5px; font-size: 13px; border: 1px solid #ccc; border-radius: 4px;" />
+      <button onclick="sendQuestion()" style="margin-top: 5px; padding: 5px 10px; background: #7b1fa2; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Gửi</button>
+    `;
+    // Gọi lại hàm sendQuestion nếu cần
+    document.getElementById("user-input").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") sendQuestion();
+    });
+  }
+  isChatbotVisible = !isChatbotVisible;
+}
+
+function sendQuestion() {
+  const input = document.getElementById("user-input");
+  const question = input.value.trim();
+  if (!question) return;
+
+  const chatLog = document.getElementById("chat-log");
+  chatLog.innerHTML += `<div><b>Bạn:</b> ${question}</div>`;
+
+  let answer = "Cảm ơn em! Đòn bẩy là nguyên lý cơ bản giúp con người nâng vật nặng dễ dàng hơn!";
+
+  const lower = question.toLowerCase();
+
+  if ((lower.includes("đặt") || lower.includes("kéo")) && (lower.includes("vật nặng") || lower.includes("vật")) && lower.includes("thanh")) {
+    answer = "✅ Em kéo **vật nặng** từ kho bên phải và thả lên **thanh đòn bẩy**. Có thể đặt ở bất kỳ vị trí nào trên thanh.";
+  }
+  else if ((lower.includes("thay đổi") || lower.includes("điều chỉnh")) && (lower.includes("khối lượng") || lower.includes("trọng lượng"))) {
+    answer = "✅ Nhấp vào **vật đã đặt** → chọn **khối lượng mới** (5 kg, 10 kg, 15 kg...) trong bảng hiện ra.";
+  }
+  else if ((lower.includes("xác định") || lower.includes("tính")) && (lower.includes("khoảng cách") || lower.includes("trục quay"))) {
+    answer = "✅ Khoảng cách từ vật đến trục quay chính là **số ghi trên thanh** (theo đơn vị mét). Ví dụ: vật ở vạch số 2 → khoảng cách = 2 m.";
+  }
+  else if ((lower.includes("hai bên") || lower.includes("so sánh")) && (lower.includes("trục quay") || lower.includes("đặt"))) {
+    answer = "✅ Đặt **vật ở bên trái và bên phải trục quay** → quan sát xem thanh nghiêng về phía nào → so sánh momen lực.";
+  }
+  else if ((lower.includes("cân bằng") || lower.includes("cân")) && (lower.includes("đòn bẩy") || lower.includes("thanh"))) {
+    answer = "✅ Đòn bẩy cân bằng khi: **Tổng momen lực bên trái = Tổng momen lực bên phải** → tức là **F₁ × d₁ = F₂ × d₂**.";
+  }
+  else if ((lower.includes("quan sát") || lower.includes("biết")) && (lower.includes("cân bằng") || lower.includes("hiện tượng"))) {
+    answer = "✅ Khi đòn bẩy **nằm ngang, không nghiêng**, và **kim chỉ mức cân bằng (màu xanh)** → thanh đang cân bằng.";
+  }
+  else if ((lower.includes("thay đổi") || lower.includes("chọn")) && (lower.includes("vật nặng khác nhau") || lower.includes("nhiều loại"))) {
+    answer = "✅ Em có thể dùng **nhiều vật khác nhau** (5kg, 10kg, 15kg) và đặt **nhiều vật cùng lúc** trên một bên để tạo hệ thống phức tạp.";
+  }
+
+  chatLog.innerHTML += `<div style="background:#f3e5f5; padding:5px; margin:5px 0; border-left:3px solid #7b1fa2;"><b>AI:</b> ${answer}</div>`;
+  input.value = "";
+  chatLog.scrollTop = chatLog.scrollHeight;
+}
+</script>
