@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thí nghiệm ảo: Đo hiệu điện thế và cường độ dòng điện – Vật lý 8</title>
+  <style>
+    body { 
+      font-family: "Times New Roman", serif; 
+      margin: 0; 
+      padding: 10px; 
+      background-color: #ffffff;
+    }
+    h2 {
+      text-align: center;
+      color: #0277bd;
+      margin-top: 0;
+    }
+    #simulation-container {
+      width: 100%;
+      height: 600px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    #chatbot {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 320px;
+      background: #e1f5fe;
+      border: 1px solid #b3e5fc;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      font-size: 13px;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+    #chat-log {
+      height: 150px;
+      overflow-y: auto;
+      margin-bottom: 8px;
+      padding: 5px;
+      background: white;
+      border: 1px solid #81d4fa;
+      font-size: 12px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 5px;
+      font-size: 13px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      margin-top: 5px;
+      padding: 5px 10px;
+      background: #0277bd;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #015384;
+    }
+    .toggle-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: #015384;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Thí nghiệm ảo: Đo hiệu điện thế và cường độ dòng điện</h2>
+<p><em>Trường THCS Lê Anh Xuân – Đà Nẵng | Môn Vật lý lớp 8</em></p>
+
+<iframe 
+  id="simulation-container" 
+  src="https://phet.colorado.edu/sims/html/circuit-construction-kit-dc-virtual-lab/latest/circuit-construction-kit-dc-virtual-lab_all.html?locale=vi"
+  allowfullscreen>
+</iframe>
+
+<div id="chatbot">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <strong>💬 Trợ lý Vật lý AI</strong>
+    <button class="toggle-btn" onclick="toggleChatbot()">🗕</button>
+  </div>
+  <div id="chat-log">
+    <em>Chào em! Em có thể hỏi: “Lắp mạch thế nào?”, “Dùng ampe kế ra sao?”, “Cách đo điện trở?”, “Mạch nối tiếp – song song?”…</em>
+  </div>
+  <input type="text" id="user-input" placeholder="Nhập câu hỏi về mạch điện..." onkeypress="if(event.key==='Enter') sendQuestion()" />
+  <button onclick="sendQuestion()">Gửi</button>
+</div>
+
+<script>
+let isChatbotVisible = true;
+
+function toggleChatbot() {
+  const chatbot = document.getElementById("chatbot");
+  if (isChatbotVisible) {
+    // Thu nhỏ
+    chatbot.style.height = "40px";
+    chatbot.style.overflow = "hidden";
+    chatbot.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <strong>💬 Trợ lý Vật lý AI</strong>
+        <button class="toggle-btn" onclick="toggleChatbot()">🗗</button>
+      </div>
+    `;
+  } else {
+    // Mở rộng
+    chatbot.style.height = "auto";
+    chatbot.style.overflow = "visible";
+    chatbot.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <strong>💬 Trợ lý Vật lý AI</strong>
+        <button class="toggle-btn" onclick="toggleChatbot()">🗕</button>
+      </div>
+      <div id="chat-log" style="height: 150px; overflow-y: auto; margin-bottom: 8px; padding: 5px; background: white; border: 1px solid #81d4fa; font-size: 12px;"></div>
+      <input type="text" id="user-input" placeholder="Nhập câu hỏi về mạch điện..." style="width: 100%; padding: 5px; font-size: 13px; border: 1px solid #ccc; border-radius: 4px;" onkeypress="if(event.key==='Enter') sendQuestion()" />
+      <button onclick="sendQuestion()" style="margin-top: 5px; padding: 5px 10px; background: #0277bd; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Gửi</button>
+    `;
+    // Khôi phục lịch sử (tạm thời)
+    document.getElementById("chat-log").innerHTML = `<em>Chào em! Em có thể hỏi: “Lắp mạch thế nào?”, “Dùng ampe kế ra sao?”, “Cách đo điện trở?”, “Mạch nối tiếp – song song?”…</em>`;
+  }
+  isChatbotVisible = !isChatbotVisible;
+}
+
+function sendQuestion() {
+  const input = document.getElementById("user-input");
+  const question = input.value.trim();
+  if (!question) return;
+
+  const chatLog = document.getElementById("chat-log");
+  chatLog.innerHTML += `<div><b>Bạn:</b> ${question}</div>`;
+
+  let answer = "Cảm ơn em! Đây là nền tảng quan trọng để hiểu về điện – từ bóng đèn đến điện thoại!";
+
+  const lower = question.toLowerCase();
+
+  if ((lower.includes("kéo") || lower.includes("chọn")) && (lower.includes("linh kiện") || lower.includes("lắp mạch") || lower.includes("mạch cơ bản"))) {
+    answer = "✅ Em kéo các linh kiện sau từ kho sang vùng làm việc: **pin**, **bóng đèn**, **dây dẫn**, **công tắc**. Đó là mạch cơ bản nhất!";
+  }
+  else if ((lower.includes("nối dây") || lower.includes("nối")) && (lower.includes("đúng") || lower.includes("hoạt động"))) {
+    answer = "✅ Dây phải **nối chắc chắn** giữa các đầu linh kiện (xuất hiện chấm tròn màu). Nếu có **khoảng hở**, mạch sẽ hở → đèn không sáng.";
+  }
+  else if ((lower.includes("thay đổi") || lower.includes("điều chỉnh")) && (lower.includes("điện trở") || lower.includes("điện áp") || lower.includes("pin"))) {
+    answer = "✅ Nhấp vào **pin** hoặc **điện trở** → kéo thanh trượt để thay đổi **điện áp (V)** hoặc **giá trị điện trở (Ω)**.";
+  }
+  else if ((lower.includes("ampe kế") || lower.includes("vôn kế") || lower.includes("đo")) && (lower.includes("dùng") || lower.includes("cách") || lower.includes("đúng"))) {
+    answer = "✅ **Ampe kế**: mắc **nối tiếp** trong mạch. **Vôn kế**: mắc **song song** với linh kiện cần đo. Nhớ kiểm tra cực (+) và (-)!";
+  }
+  else if ((lower.includes("mạch") || lower.includes("lắp")) && (lower.includes("nối tiếp") || lower.includes("song song"))) {
+    answer = "✅ **Nối tiếp**: các linh kiện nối **liền nhau thành 1 đường**. **Song song**: chia **2 nhánh trở lên**, đầu vào/ra nối chung.";
+  }
+  else if ((lower.includes("kiểm tra") || lower.includes("thử")) && (lower.includes("dẫn điện") || lower.includes("vật liệu"))) {
+    answer = "✅ Kéo vật liệu (gỗ, đồng, nhựa...) vào mạch → nếu **đèn sáng**, vật liệu **dẫn điện**. Nếu không → **cách điện**.";
+  }
+  else if ((lower.includes("quan sát") || lower.includes("biết")) && (lower.includes("mạch hoạt động") || lower.includes("bình thường"))) {
+    answer = "✅ Mạch hoạt động khi: **đèn sáng**, **ampe kế có số đọc**, **electron (chấm xanh) di chuyển liên tục** trong dây dẫn.";
+  }
+
+  chatLog.innerHTML += `<div style="background:#e1f5fe; padding:5px; margin:5px 0; border-left:3px solid #0277bd;"><b>AI:</b> ${answer}</div>`;
+  input.value = "";
+  chatLog.scrollTop = chatLog.scrollHeight;
+}
+</script>
+
+</body>
+</html>
